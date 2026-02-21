@@ -1,0 +1,20 @@
+services:
+  db:
+    image: 'postgres:16-alpine'
+    container_name: closure-crm-db
+    environment:
+      POSTGRES_DB: closure_crm_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: wapxj380
+    ports:
+      - '5432:5432'
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d closure_crm_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db_data:
