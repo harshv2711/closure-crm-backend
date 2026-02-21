@@ -23,31 +23,29 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler; // Added Handler
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // 1. Disable CSRF for REST APIs (since we use JWTs)
             .csrf(AbstractHttpConfigurer::disable)
-            
-            // 2. Configure endpoint permissions
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll() // Allow register and login
-                .anyRequest().authenticated()               // Protect everything else
+                // Allow auth endpoints, OAuth2 redirects, and the success callback
+                .requestMatchers("/api/auth/**", "/oauth2/**", "/login/**").permitAll()
+                .anyRequest().authenticated()
             )
-            
-            // 3. Make the session stateless (don't store user state on server)
             .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                // OAuth2 login needs a session to handle the redirect flow
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
             )
-            
-            // 4. Link our DB-backed AuthenticationProvider
             .authenticationProvider(authenticationProvider)
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
             
-            // 5. Add our JWT filter before the standard login filter
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+            // Enabled OAuth2 Login with our custom Success Handler
+            .oauth2Login(oauth2 -> oauth2
+                .successHandler(oAuth2LoginSuccessHandler)
+            );
 
-        // Note: OAuth2 is disabled for now to allow the app to boot without Client IDs
         return http.build();
     }
 }
