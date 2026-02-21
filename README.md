@@ -1,3 +1,8 @@
+Here is the complete, fixed `README.md` file. I also added the **API Documentation (Swagger)** section at the bottom, which we set up just a few minutes ago!
+
+You can copy this entire block and replace the contents of your `README.md`:
+
+```markdown
 # Closure CRM API
 
 **Closure CRM API** is a robust, production-ready backend built with Spring Boot, designed to streamline lead management and sales operations. The system features a hybrid authentication model supporting both traditional credentials and Google OAuth2.
@@ -42,3 +47,57 @@ To run the application locally, you must set the following variables in your IDE
 Ensure your PostgreSQL container is running:
 ```bash
 docker compose up -d
+
+```
+
+### 2. Run the Application
+
+Set your environment variables and start the server:
+
+```bash
+export GOOGLE_CLIENT_ID="your_id"
+export GOOGLE_CLIENT_SECRET="your_secret"
+./gradlew bootRun
+
+```
+
+### 3. Testing OAuth2
+
+Visit the following URL in your browser to trigger the Google login flow:
+`http://localhost:8080/oauth2/authorization/google`
+
+---
+
+## API Endpoints
+
+### Authentication
+
+* `POST /api/auth/register` - Register a new user with email and password.
+* `POST /api/auth/login` - Authenticate and receive a JWT.
+* `GET /api/auth/oauth-success` - Callback endpoint that returns the JWT after a Google login.
+
+### Leads (Next Phase)
+
+* `GET /api/leads` - List leads assigned to the current user.
+* `POST /api/leads` - Create and assign a new lead.
+
+---
+
+## API Documentation
+
+Interactive API documentation is available via Swagger UI when the application is running.
+You can access it at:
+
+`http://localhost:8080/swagger-ui/index.html`
+
+---
+
+## License
+
+Distributed under the MIT License.
+
+```
+
+Would you like me to generate the Java code for the `Lead` Entity and its database migration now?
+
+```
