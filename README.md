@@ -1,8 +1,4 @@
-Here is the complete, fixed `README.md` file. I also added the **API Documentation (Swagger)** section at the bottom, which we set up just a few minutes ago!
 
-You can copy this entire block and replace the contents of your `README.md`:
-
-```markdown
 # Closure CRM API
 
 **Closure CRM API** is a robust, production-ready backend built with Spring Boot, designed to streamline lead management and sales operations. The system features a hybrid authentication model supporting both traditional credentials and Google OAuth2.
